@@ -1,0 +1,25 @@
+import os
+import os.path
+import glob
+import sys
+
+rootdir = sys.argv[1]#"/Users/macbookpro/books"
+ext = sys.argv[2]#"*.docx"
+
+def getPath(_path,_count,_searchPattern):
+    result = ""
+    try:
+        for line in glob.glob(os.path.join(_path, _searchPattern)):
+            result = result+" " * _count * 4 + "|" + "-" * 3 + os.path.basename(line) + "\r\n"
+
+        for line in os.listdir(_path):
+            filepath = os.path.join(_path,line)
+            if os.path.isdir(filepath):
+                data = getPath(filepath,_count+1,_searchPattern)
+                if (data != ""):
+                    result = " " * _count * 4 + "*" + '-' * 3 + line + "\r\n" + data + "\r\n"
+    except Exception as e:
+        print e
+    return result
+base = getPath(rootdir, 0, ext)
+print(base)
